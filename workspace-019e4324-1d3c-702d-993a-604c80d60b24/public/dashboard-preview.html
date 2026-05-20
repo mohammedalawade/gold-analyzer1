@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Gold Psychology Analyzer — Preview</title>
+<style>
+:root{--bg:#0b0b0f;--card:#13131f;--border:#2a2a3c;--gold:#d4af37;--text:#e5e7eb;--muted:#9ca3af;--red:#ef4444;--green:#4ade80;--yellow:#facc15;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh;}
+.container{max-width:1200px;margin:0 auto;padding:20px;}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:24px;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#d4af37,#f5e18f,#b5902f);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--bg);font-weight:bold;font-size:14px;}
+h1{font-size:20px;background:linear-gradient(90deg,#d4af37,#f5e18f,#d4af37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.bell{position:relative;padding:8px;border-radius:8px;background:var(--card);border:1px solid var(--border);cursor:pointer;}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:white;font-size:11px;font-weight:bold;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+@media(max-width:768px){.grid-3{grid-template-columns:1fr;}}
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px;}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr;}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+.card-title{color:var(--gold);font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.big-price{font-size:36px;font-weight:700;letter-spacing:-1px;margin-bottom:4px;}
+.change{font-size:14px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:4px;}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.stat-box{background:rgba(11,11,15,0.5);border-radius:8px;padding:10px;text-align:center;font-size:12px;}
+.stat-label{color:var(--muted);margin-bottom:4px;}
+.stat-value{color:white;font-weight:600;}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;}
+.gauge-val{font-size:32px;font-weight:700;color:white;}
+.gauge-label{font-size:12px;padding:4px 12px;border-radius:20px;margin-top:4px;font-weight:600;}
+.rec-box{display:flex;align-items:center;gap:16px;}
+.rec-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;}
+.rec-action{font-size:28px;font-weight:700;}
+.rec-conf{font-size:12px;color:var(--muted);}
+.rec-reason{font-size:13px;color:var(--muted);background:rgba(11,11,15,0.5);border-radius:8px;padding:12px;border:1px solid var(--border);margin-top:12px;}
+.chart-wrap{margin-top:8px;}
+.chart-svg{width:100%;height:auto;}
+.axis{fill:var(--muted);font-size:11px;}
+.line{fill:none;stroke:var(--gold);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;}
+.area{fill:url(#goldGrad);opacity:0.25;}
+.grid-line{stroke:var(--border);stroke-dasharray:3 3;}
+.axis-line{stroke:var(--border);}
+.ind-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(42,42,60,0.5);font-size:14px;}
+.ind-item:last-child{border-bottom:none;}
+.ind-name{color:var(--muted);}
+.ind-val{color:white;font-weight:600;}
+.events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:768px){.events-grid{grid-template-columns:1fr;}}
+.ev-card{background:rgba(11,11,15,0.5);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.ev-title{font-size:13px;font-weight:600;color:white;display:flex;justify-content:space-between;align-items:center;}
+.ev-score{font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600;}
+.ev-desc{font-size:12px;color:var(--muted);margin-top:6px;}
+.ev-time{font-size:11px;color:#4b5563;margin-top:8px;}
+.notif-list{display:none;position:absolute;right:0;top:40px;width:340px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.5);z-index:50;max-height:400px;overflow-y:auto;}
+.notif-list.show{display:block;}
+.notif-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);}
+.notif-itm{padding:12px 16px;border-bottom:1px solid rgba(42,42,60,0.5);display:flex;gap:10px;align-items:flex-start;}
+.notif-itm:last-child{border-bottom:none;}
+.notif-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.notif-title{font-size:13px;font-weight:600;color:white;}
+.notif-msg{font-size:12px;color:var(--muted);margin-top:2px;}
+.notif-time{font-size:11px;color:#4b5563;margin-top:4px;}
+.unread-dot{background:var(--red);}
+.read-dot{background:#374151;}
+.footer{text-align:center;color:#4b5563;font-size:12px;margin-top:32px;padding-bottom:24px;}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="logo">
+    <div class="logo-icon">Au</div>
+    <div><h1>Gold Psychology Analyzer</h1><p style="font-size:12px;color:var(--muted);margin-top:2px;">Real-time sentiment &amp; cycle intelligence</p></div>
+  </div>
+  <div style="position:relative;">
+    <div class="bell" onclick="document.getElementById('notifs').classList.toggle('show')">
+      🔔
+      <span class="badge">10</span>
+    </div>
+    <div class="notif-list" id="notifs">
+      <div class="notif-hdr"><span style="font-size:13px;font-weight:600;">Notifications</span><span style="font-size:11px;color:var(--muted);">8 unread</span></div>
+      <div class="notif-itm">
+          <div class="notif-dot unread-dot" style="background:#f87171;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">⚠️ Gold Price Drop: -11.42%</div>
+            <div class="notif-msg">Price moved from $5059.30 to $4481.73 (source: commoditypriceapi.com).</div>
+            <div class="notif-time">2:05:19 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot unread-dot" style="background:#60a5fa;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">🌍 Central Bank Gold Purchase</div>
+            <div class="notif-msg">A major central bank announced an increase in gold reserves.</div>
+            <div class="notif-time">1:39:57 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot unread-dot" style="background:#f87171;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">⚠️ Gold Price Spike: +13.18%</div>
+            <div class="notif-msg">Price moved from $4470.00 to $5059.30 (source: freegoldapi.com).</div>
+            <div class="notif-time">1:39:57 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot unread-dot" style="background:#60a5fa;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">🌍 Fed Rate Decision</div>
+            <div class="notif-msg">Federal Reserve signaled potential rate cuts later this year.</div>
+            <div class="notif-time">1:01:12 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot unread-dot" style="background:#60a5fa;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">🌍 Fed Rate Decision</div>
+            <div class="notif-msg">Federal Reserve signaled potential rate cuts later this year.</div>
+            <div class="notif-time">12:52:34 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot read-dot" style="background:#facc15;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">📊 BUY Confidence Surged</div>
+            <div class="notif-msg">Confidence for BUY moved from 62% to 88% (26% change).</div>
+            <div class="notif-time">12:52:34 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot unread-dot" style="background:#f87171;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">⚠️ Gold Price Spike: +2.15%</div>
+            <div class="notif-msg">Price moved from $3280.50 to $3351.20 in the last cycle.</div>
+            <div class="notif-time">12:52:34 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot unread-dot" style="background:#d4af37;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">↔️ Signal Changed: HOLD → BUY</div>
+            <div class="notif-msg">The trading signal shifted from HOLD to BUY. Confidence: 87%. Review your positions.</div>
+            <div class="notif-time">12:52:34 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot unread-dot" style="background:#60a5fa;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">🌍 Fed Rate Decision</div>
+            <div class="notif-msg">Federal Reserve signaled potential rate cuts later this year.</div>
+            <div class="notif-time">12:52:31 AM</div>
+          </div>
+        </div><div class="notif-itm">
+          <div class="notif-dot read-dot" style="background:#facc15;"></div>
+          <div style="flex:1;">
+            <div class="notif-title">📊 BUY Confidence Surged</div>
+            <div class="notif-msg">Confidence for BUY moved from 62% to 88% (26% change).</div>
+            <div class="notif-time">12:52:31 AM</div>
+          </div>
+        </div>
+    </div>
+  </div>
+</header>
+
+<div class="grid-3">
+  <div class="card">
+    <div class="card-title">📈 Gold Spot Price <span style="margin-left:auto;color:var(--muted);font-weight:400;">USD/troy oz</span></div>
+    <div class="big-price">$4481.73</div>
+    <div class="change" style="color:var(--red);">
+      ▼ -577.57 (-11.42%)
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-label">Low (30m)</div><div class="stat-value">$3272.50</div></div>
+      <div class="stat-box"><div class="stat-label">High (30m)</div><div class="stat-value">$5059.30</div></div>
+      <div class="stat-box"><div class="stat-label">Avg (30m)</div><div class="stat-value">$3502.21</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚖️ Fear &amp; Greed</div>
+    <div class="gauge-wrap">
+      <svg width="160" height="160" viewBox="0 0 160 160" style="transform:rotate(-90deg);">
+        <circle cx="80" cy="80" r="44" stroke="var(--border)" stroke-width="8" fill="none"/>
+        <circle cx="80" cy="80" r="44" stroke="#22c55e" stroke-width="8" fill="none"
+          stroke-dasharray="276.46015351590177 276.46015351590177" stroke-dashoffset="0" stroke-linecap="round" style="transition:stroke-dashoffset 0.5s;"/>
+      </svg>
+      <div style="position:absolute;margin-top:-110px;text-align:center;">
+        <div class="gauge-val">100</div>
+        <div class="gauge-label" style="background:#22c55e22;color:#22c55e;">Extreme Greed</div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:-20px;">0 = Extreme Fear · 100 = Extreme Greed</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💡 Smart Signal</div>
+    <div class="rec-box">
+      <div class="rec-icon" style="background:#f8717122;color:#f87171;">📉</div>
+      <div>
+        <div class="rec-action" style="color:#f87171;">SELL</div>
+        <div class="rec-conf">Confidence: 82%</div>
+      </div>
+    </div>
+    <div class="rec-reason">Extreme greed (100/100). Euphoria risk. Price $4481.73. Consider profit-taking.</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">📊 Price History (5-min intervals)</div>
+    <div class="chart-wrap">
+      <svg class="chart-svg" viewBox="0 0 700 260">
+        <defs><linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#d4af37" stop-opacity="0.4"/><stop offset="95%" stop-color="#d4af37" stop-opacity="0"/></linearGradient></defs>
+        <line class="grid-line" x1="50" y1="20.0" x2="680" y2="20.0"/><line class="grid-line" x1="50" y1="62.0" x2="680" y2="62.0"/><line class="grid-line" x1="50" y1="104.0" x2="680" y2="104.0"/><line class="grid-line" x1="50" y1="146.0" x2="680" y2="146.0"/><line class="grid-line" x1="50" y1="188.0" x2="680" y2="188.0"/><line class="grid-line" x1="50" y1="230.0" x2="680" y2="230.0"/>
+        <path class="area" d="M50.0,225.2 L71.7,228.5 L93.4,228.5 L115.2,229.2 L136.9,224.3 L158.6,224.8 L180.3,226.7 L202.1,227.8 L223.8,223.2 L245.5,223.8 L267.2,224.9 L289.0,222.1 L310.7,227.1 L332.4,224.9 L354.1,225.7 L375.9,227.3 L397.6,227.3 L419.3,225.9 L441.0,221.3 L462.8,226.1 L484.5,223.5 L506.2,223.1 L527.9,223.1 L549.7,223.1 L571.4,223.6 L593.1,223.2 L614.8,89.8 L636.6,21.2 L658.3,21.2 L680.0,88.4 L680.0,230 L50.0,230 Z"/>
+        <path class="line" d="M50.0,225.2 L71.7,228.5 L93.4,228.5 L115.2,229.2 L136.9,224.3 L158.6,224.8 L180.3,226.7 L202.1,227.8 L223.8,223.2 L245.5,223.8 L267.2,224.9 L289.0,222.1 L310.7,227.1 L332.4,224.9 L354.1,225.7 L375.9,227.3 L397.6,227.3 L419.3,225.9 L441.0,221.3 L462.8,226.1 L484.5,223.5 L506.2,223.1 L527.9,223.1 L549.7,223.1 L571.4,223.6 L593.1,223.2 L614.8,89.8 L636.6,21.2 L658.3,21.2 L680.0,88.4"/>
+        <text class="axis" x="50" y="255">11:01 PM</text>
+        <text class="axis" x="650" y="255">02:05 AM</text>
+        <text class="axis" x="10" y="24">$5069</text>
+        <text class="axis" x="10" y="234">$3266</text>
+        <line class="axis-line" x1="50" y1="20" x2="50" y2="230"/>
+        <line class="axis-line" x1="50" y1="230" x2="680" y2="230"/>
+      </svg>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <div class="card">
+      <div class="card-title">🧠 Sentiment Analysis</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;"><span style="font-size:14px;color:var(--muted);">Latest Index</span><span style="font-size:18px;font-weight:700;">100/100</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border);"><span style="font-size:14px;color:var(--muted);">Label</span><span style="font-size:14px;font-weight:600;color:var(--gold);">Extreme Greed</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border);"><span style="font-size:14px;color:var(--muted);">Recent Delta</span><span style="font-size:14px;font-weight:600;color:var(--red);">-577.57</span></div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5;">The Fear &amp; Greed index is derived from price momentum versus a short-term average. Extreme readings may signal contrarian opportunities in gold.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📉 Macro Indicators</div>
+      <div class="ind-item"><span class="ind-name">Real Interest Rate</span><span class="ind-val">1.77 <span style="font-size:11px;color:var(--muted);">%</span></span></div><div class="ind-item"><span class="ind-name">CPI Inflation (YoY)</span><span class="ind-val">2.92 <span style="font-size:11px;color:var(--muted);">%</span></span></div><div class="ind-item"><span class="ind-name">US 10Y Treasury Yield</span><span class="ind-val">4.57 <span style="font-size:11px;color:var(--muted);">%</span></span></div><div class="ind-item"><span class="ind-name">US Dollar Index (DXY)</span><span class="ind-val">97.36 <span style="font-size:11px;color:var(--muted);">index</span></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">🌍 Geopolitical &amp; Market Events</div>
+  <div class="events-grid">
+    <div class="ev-card">
+        <div class="ev-title">Central Bank Gold Purchase<span class="ev-score" style="background:var(--red)22;color:var(--red);">Impact 6</span></div>
+        <div class="ev-desc">A major central bank announced an increase in gold reserves.</div>
+        <div class="ev-time">5/20/2026, 1:39:57 AM</div>
+      </div><div class="ev-card">
+        <div class="ev-title">Fed Rate Decision<span class="ev-score" style="background:var(--red)22;color:var(--red);">Impact 5</span></div>
+        <div class="ev-desc">Federal Reserve signaled potential rate cuts later this year.</div>
+        <div class="ev-time">5/20/2026, 1:01:12 AM</div>
+      </div><div class="ev-card">
+        <div class="ev-title">Mining Supply Disruption<span class="ev-score" style="background:#f9731622;color:#f97316;">Impact 4</span></div>
+        <div class="ev-desc">Labor strike at a major gold mine threatens near-term supply.</div>
+        <div class="ev-time">5/20/2026, 12:41:10 AM</div>
+      </div><div class="ev-card">
+        <div class="ev-title">Asian Session Open<span class="ev-score" style="background:var(--muted)22;color:var(--muted);">Impact 2</span></div>
+        <div class="ev-desc">Markets opened with moderate risk appetite.</div>
+        <div class="ev-time">5/20/2026, 12:41:10 AM</div>
+      </div><div class="ev-card">
+        <div class="ev-title">System Launch<span class="ev-score" style="background:var(--red)22;color:var(--red);">Impact 5</span></div>
+        <div class="ev-desc">Gold Psychology Analyzer initialized and started tracking cycles.</div>
+        <div class="ev-time">5/20/2026, 12:41:10 AM</div>
+      </div>
+  </div>
+</div>
+
+<div class="footer">Gold Psychology Analyzer · Snapshot generated 5/20/2026, 2:05:24 AM · Auto-refresh every 5 minutes when server is running</div>
+</div>
+</body>
+</html>
